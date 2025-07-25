@@ -1,8 +1,11 @@
 ﻿using Basket.Core.Entities;
 using Basket.Core.Repositories;
 using Microsoft.Extensions.Caching.Distributed;
+using Newtonsoft.Json;
+using System.Net.Http.Json;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Basket.Infrastructure.Repositories
 {
@@ -22,12 +25,12 @@ namespace Basket.Infrastructure.Repositories
             {
                 return null;
             }
-            return JsonSerializer.Deserialize<ShoppingCart>(basket);
+            return JsonConvert.DeserializeObject<ShoppingCart>(basket);
         }
 
         public async Task<ShoppingCart> UpdateBasket(ShoppingCart shoppingCart)
         {
-            await _redisCache.SetStringAsync(shoppingCart.UserName, JsonSerializer.Serialize(shoppingCart));
+            await _redisCache.SetStringAsync(shoppingCart.UserName, JsonConvert.SerializeObject(shoppingCart));
 
             return await GetBasket(shoppingCart.UserName);
         }
