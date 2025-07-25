@@ -15,6 +15,9 @@ services:
       context: .
       dockerfile: Basket/Basket.API/Dockerfile
 
+  portainer:
+    image: portainer/portainer-ce
 volumes:
   mongo_data:
+  portainer_data:
 
