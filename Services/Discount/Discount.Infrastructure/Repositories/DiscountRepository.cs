@@ -19,7 +19,7 @@ namespace Discount.Infrastructure.Repositories
         {
             await using var connection = new NpgsqlConnection(_configuration.GetSection("DatabaseSettings")["ConnectionString"]);
             var coupon = await connection.QueryFirstOrDefaultAsync<Coupon>
-                ("SELECT * FROM Counpon WHERE ProductName = @ProductName", 
+                ("SELECT * FROM Coupon WHERE ProductName = @ProductName", 
                 new { ProductName = productName});
             if(coupon == null)
             {
