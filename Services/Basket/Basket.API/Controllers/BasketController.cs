@@ -1,4 +1,5 @@
-﻿using Basket.Application.Commands;
+﻿using Asp.Versioning;
+using Basket.Application.Commands;
 using Basket.Application.Mappers;
 using Basket.Application.Queries;
 using Basket.Application.Responses;
@@ -11,6 +12,7 @@ using System.Net;
 
 namespace Basket.API.Controllers
 {
+    [ApiVersion("1")]
     public class BasketController : ApiController
     {
         private readonly IMediator _mediator;
@@ -26,7 +28,7 @@ namespace Basket.API.Controllers
 
         [HttpGet]
         [Route("[action]/{userName}", Name = "GetBasketByUserName")]
-        [ProducesResponseType(typeof(ShoppingCartResponse), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ShoppingCartResponse), (int)HttpStatusCode.OK)]
         public async Task<ActionResult<ShoppingCartResponse>> GetBasket(string userName)
         {
             var query = new GetBasketByUserNameQuery(userName);
@@ -63,7 +65,7 @@ namespace Basket.API.Controllers
             //Get the existing basket with username
             var query = new GetBasketByUserNameQuery(basketCheckout.UserName);
             var basket = await _mediator.Send(query);
-            if(basket == null)
+            if (basket == null)
             {
                 return BadRequest("Basket not found");
             }

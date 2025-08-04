@@ -38,12 +38,14 @@ builder.Services.AddInfrastructureServices(builder.Configuration);
 
 //Consumer Class
 builder.Services.AddScoped<BasketOrderingConsumer>();
+builder.Services.AddScoped<BasketOrderingConsumerV2>();
 
 //Mass Transit
 builder.Services.AddMassTransit(config =>
 {
     //Mark this as consumer
     config.AddConsumer<BasketOrderingConsumer>();
+    config.AddConsumer<BasketOrderingConsumerV2>();
     config.UsingRabbitMq((ctx, cfg) =>
     {
         cfg.Host(builder.Configuration["EventBusSettings:HostAddress"]);
@@ -51,6 +53,11 @@ builder.Services.AddMassTransit(config =>
         cfg.ReceiveEndpoint(EventBusConstant.BasketCheckoutQueue, e =>
         {
             e.ConfigureConsumer<BasketOrderingConsumer>(ctx);
+        });
+        //V2 version
+        cfg.ReceiveEndpoint(EventBusConstant.BasketCheckoutQueueV2, e =>
+        {
+            e.ConfigureConsumer<BasketOrderingConsumerV2>(ctx);
         });
     });
 });
