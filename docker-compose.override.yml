@@ -107,6 +107,18 @@ services:
     ports:
       - "8003:8080"
 
+  ocelot.apigateway:
+    container_name: ocelot.apigateway
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    depends_on:
+      - catalog.api
+      - basket.api
+      - discount.api
+      - ordering.api
+    ports:
+      - "8010:8080"
+
   pgadmin:
     container_name: pgadmin
     environment:
