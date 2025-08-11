@@ -21,8 +21,10 @@
     "bootstrap": "^5.3.7",
     "font-awesome": "^4.7.0",
     "ngx-bootstrap": "^12.0.0",
+    "ngx-spinner": "^17.0.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
+    "xng-breadcrumb": "^8.0.2",
     "zone.js": "~0.14.3"
   },
   "devDependencies": {

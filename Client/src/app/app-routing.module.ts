@@ -6,8 +6,8 @@ import { ServerErrorComponent } from './core/server-error/server-error.component
 import { UnAuthenticatedComponent } from './core/un-authenticated/un-authenticated.component';
 
 export const routes: Routes = [
-  { path: '', component: HomeComponent },
-  { path: 'store', loadChildren: () => import('./store/store.module').then(r => r.StoreModule) },
+  { path: '', component: HomeComponent, data: {breadcrumb: 'Home'} },
+  { path: 'store', loadChildren: () => import('./store/store.module').then(r => r.StoreModule), data: {breadcrumb: 'Store'} },
   { path: 'not-found', component: NotFoundComponent },
   { path: 'server-error', component: ServerErrorComponent },
   { path: 'un-authenticated', component: UnAuthenticatedComponent },
