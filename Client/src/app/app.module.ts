@@ -6,7 +6,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 import { CoreModule } from './core/core.module';
-import { StoreModule } from './store/store.module';
+import { HomeModule } from './home/home.module';
 
 
 
@@ -21,7 +21,7 @@ import { StoreModule } from './store/store.module';
     HttpClientModule,
     BrowserAnimationsModule,
     CoreModule,
-    StoreModule
+    HomeModule
   ],
   providers: [],
   bootstrap: [AppComponent]
