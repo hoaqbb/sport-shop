@@ -8,6 +8,7 @@ import { UnAuthenticatedComponent } from './core/un-authenticated/un-authenticat
 export const routes: Routes = [
   { path: '', component: HomeComponent, data: {breadcrumb: 'Home'} },
   { path: 'store', loadChildren: () => import('./store/store.module').then(r => r.StoreModule), data: {breadcrumb: 'Store'} },
+  { path: 'basket', loadChildren: () => import('./basket/basket.module').then(r => r.BasketModule), data: {breadcrumb: 'Basket'} },
   { path: 'not-found', component: NotFoundComponent },
   { path: 'server-error', component: ServerErrorComponent },
   { path: 'un-authenticated', component: UnAuthenticatedComponent },
