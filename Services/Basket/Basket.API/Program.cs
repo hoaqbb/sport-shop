@@ -6,6 +6,9 @@ using Basket.Infrastructure.Repositories;
 using Common.Logging;
 using Discount.Grpc.Protos;
 using MassTransit;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Serilog;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Reflection;
@@ -17,7 +20,7 @@ var builder = WebApplication.CreateBuilder(args);
 //Serilog Configuration
 builder.Host.UseSerilog(Logging.ConfigureLogger);
 
-builder.Services.AddControllers();
+// builder.Services.AddControllers();
 
 //Add API Versioning
 builder.Services.AddApiVersioning(options =>
@@ -97,6 +100,20 @@ builder.Services.AddMassTransit(config =>
 
 builder.Services.AddMassTransitHostedService();
 
+//Identity Server changes
+var userPolicy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+builder.Services.AddControllers(config =>
+{
+    config.Filters.Add(new AuthorizeFilter(userPolicy));
+});
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.Authority = "https://localhost:8009";
+        options.Audience = "Basket";
+    });
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -110,6 +127,8 @@ if (app.Environment.IsDevelopment())
         c.SwaggerEndpoint("/swagger/v2/swagger.json", "Basket.API v2");
     });
 }
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 

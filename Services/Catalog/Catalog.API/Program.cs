@@ -4,6 +4,9 @@ using Catalog.Core.Repositories;
 using Catalog.Infrastructure.Data;
 using Catalog.Infrastructure.Repositories;
 using Common.Logging;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Serilog;
 using System.Reflection;
 
@@ -13,8 +16,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 //Serilog Configuration
 builder.Host.UseSerilog(Logging.ConfigureLogger);
-
-builder.Services.AddControllers();
 
 //Add API Versioning
 builder.Services.AddApiVersioning(options =>
@@ -45,6 +46,20 @@ builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IBrandRepository, ProductRepository>();
 builder.Services.AddScoped<ITypeRepository, ProductRepository>();
 
+//Identity Server changes
+var userPolicy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+builder.Services.AddControllers(config =>
+{
+    config.Filters.Add(new AuthorizeFilter(userPolicy));
+});
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.Authority = "https://localhost:8009";
+        options.Audience = "Catalog";
+    });
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -53,6 +68,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 
