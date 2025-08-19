@@ -56,7 +56,7 @@ services:
   catalog.api:
     container_name: catalog.api
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_ENVIRONMENT=Docker
       - "DatabaseSettings__ConnectionString=mongodb://catalogdb:27017"
       - "DatabaseSettings__DatabaseName=CatalogDb"
       - "DatabaseSettings__ProductsCollection=Products"
@@ -71,7 +71,7 @@ services:
   basket.api:
     container_name: basket.api
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_ENVIRONMENT=Docker
       - "CacheSettings__ConnectionString=basketdb:6379"
       - "GrpcSettings__DiscountUrl=http://discount.api:8080"
       - "EventBusSettings__HostAddress=amqp://guest:guest@rabbitmq:5672"
@@ -159,3 +159,12 @@ services:
       - elasticsearch
     ports:
       - "5601:5601"  
+
+  identityserver:
+    container_name: identityserver
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "8009:8080"
+    volumes:
+      - ./volumes/identityserver/keys:/app/keys

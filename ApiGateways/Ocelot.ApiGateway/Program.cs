@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
 
@@ -20,6 +21,20 @@ builder.Host.ConfigureAppConfiguration((evn, config) =>
 });
 
 builder.Services.AddControllers();
+
+var authScheme = "SportShopGatewayAuthScheme";
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(authScheme, options =>
+    // .AddJwtBearer(options =>
+    {
+        options.Authority = "http://localhost:8009";
+        //to communicate between other containers with identity server container
+        if (builder.Environment.IsDevelopment())
+            options.MetadataAddress = "http://identityserver:8080/.well-known/openid-configuration";
+        options.Audience = "SportShopGateway";
+        options.RequireHttpsMetadata = false;
+    });
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -37,6 +52,8 @@ if (app.Environment.IsDevelopment())
 app.UseRouting();
 
 app.UseCors("CorsPolicy");
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 

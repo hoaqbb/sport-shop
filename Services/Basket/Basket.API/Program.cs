@@ -110,8 +110,12 @@ builder.Services.AddControllers(config =>
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
-        options.Authority = "https://localhost:8009";
+        options.Authority = "http://localhost:8009";
+        //to communicate between other containers with identity server container
+        if (builder.Environment.IsEnvironment("Docker"))
+            options.MetadataAddress  = "http://identityserver:8080/.well-known/openid-configuration";
         options.Audience = "Basket";
+        options.RequireHttpsMetadata = false;
     });
 
 var app = builder.Build();
